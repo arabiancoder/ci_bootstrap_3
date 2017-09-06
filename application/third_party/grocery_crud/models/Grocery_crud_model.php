@@ -50,8 +50,8 @@ class Grocery_crud_model  extends CI_Model  {
     	if($this->table_name === null)
     		return false;
 
-    	$select = "`{$this->table_name}`.*";
-
+//    	$select = "`{$this->table_name}`.*";
+    	$select = "{$this->table_name}.*";	// To fix dbPrefix removed "`" 
     	//set_relation special queries
     	if(!empty($this->relation))
     	{
@@ -111,6 +111,10 @@ class Grocery_crud_model  extends CI_Model  {
     		list($field_name, $relation_table, $selection_table, $primary_key_alias_to_this_table,
     					$primary_key_alias_to_selection_table, $title_field_selection_table, $priority_field_relation_table) = array_values((array)$relation_n_n);
 
+		$selection_table=$this->db->dbprefix($selection_table);	// line added to fix dbPrefix
+		$relation_table=$this->db->dbprefix($relation_table);	// line added to fix dbPrefix
+
+		
     		$primary_key_selection_table = $this->get_primary_key($selection_table);
 
 	    	$field = "";
@@ -199,8 +203,8 @@ class Grocery_crud_model  extends CI_Model  {
     	if( !($this->db->table_exists($table_name)) )
     		return false;
 
-    	$this->table_name = $table_name;
-
+//    	$this->table_name = $table_name;	// removed by Arabian coder
+	$this->table_name = $this->db->dbprefix($table_name);	// To fix dbPrefix added $this->db->dbprefix()
     	return true;
     }
 
